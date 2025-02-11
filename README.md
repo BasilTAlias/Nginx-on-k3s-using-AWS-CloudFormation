@@ -68,4 +68,4 @@ This command will automatically delete all resources created by the stack, ensur
 
 This guide provides two methods for deploying an Nginx web server on k3s using AWS CloudFormation. The manual AWS Console method is user-friendly and ideal for beginners, while the AWS CLI method enables automation and efficient resource management. Depending on your workflow and preference, you can choose the most suitable deployment method.
 
-Happy deploying! 🚀
+
