@@ -1,0 +1,114 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Deploy an Nginx application on k3s using CloudFormation
+
+Resources:
+  K3sInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-04681163a08179f28  # Amazon Linux 2 AMI
+      InstanceType: t2.micro
+      KeyName: Ec2-DockerKeypair  # Replace with your EC2 key pair name
+      SecurityGroupIds:
+        - !Ref K3sSecurityGroup
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          set -e  # Exit script on any error
+
+          # Install k3s
+          echo "Installing k3s..."
+          curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_SELINUX_RPM=true sh - || { echo "k3s installation failed"; exit 1; }
+
+          # Configure kubectl
+          echo "Configuring kubectl..."
+          mkdir -p ~/.kube
+          sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+          sudo chown $(id -u):$(id -g) ~/.kube/config
+          export KUBECONFIG=~/.kube/config
+          echo 'export KUBECONFIG=~/.kube/config' >> ~/.bashrc
+
+          # Add k3s kubectl to PATH
+          export PATH=$PATH:/usr/local/bin
+          echo 'export PATH=$PATH:/usr/local/bin' >> ~/.bashrc
+
+          # Wait for k3s to be ready
+          echo "Waiting for k3s to be ready..."
+          until kubectl get nodes; do
+            echo "Retrying in 5 seconds..."
+            sleep 5
+          done
+
+          # Create the 'nginx' namespace if it doesn't exist
+          echo "Creating 'nginx' namespace..."
+          kubectl create namespace nginx --dry-run=client -o yaml | kubectl apply -f -
+
+          # Apply deployment.yaml in the 'nginx' namespace
+          echo "Applying deployment.yaml in the 'nginx' namespace..."
+          cat <<EOF > /tmp/deployment.yaml
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: nginx
+            namespace: nginx
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                app: nginx
+            template:
+              metadata:
+                labels:
+                  app: nginx
+              spec:
+                containers:
+                - name: nginx
+                  image: nginx:latest
+                  ports:
+                  - containerPort: 80
+          EOF
+          kubectl apply -f /tmp/deployment.yaml -n nginx || { echo "Failed to apply deployment.yaml"; exit 1; }
+
+          # Apply service.yaml in the 'nginx' namespace
+          echo "Applying service.yaml in the 'nginx' namespace..."
+          cat <<EOF > /tmp/service.yaml
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: nginx-service
+            namespace: nginx
+          spec:
+            selector:
+              app: nginx
+            ports:
+            - protocol: TCP
+              port: 80
+              targetPort: 80
+              nodePort: 31111
+            type: NodePort
+          EOF
+          kubectl apply -f /tmp/service.yaml -n nginx || { echo "Failed to apply service.yaml"; exit 1; }
+
+          echo "k3s setup and Nginx deployment completed successfully."
+
+  K3sSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow SSH, HTTP, and NodePort traffic
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0  # Allow SSH from anywhere (restrict in production)
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0  # Allow HTTP from anywhere
+        - IpProtocol: tcp
+          FromPort: 31111
+          ToPort: 31111
+          CidrIp: 0.0.0.0/0  # Allow NodePort 31111 from anywhere
+
+Outputs:
+  InstancePublicIp:
+    Description: Public IP of the EC2 instance
+    Value: !GetAtt K3sInstance.PublicIp
