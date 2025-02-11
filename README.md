@@ -29,7 +29,7 @@ This method provides a user-friendly interface to deploy the CloudFormation stac
 12. Locate the **InstancePublicIp** output, which provides the public IP address of the EC2 instance running Nginx.
 13. Open a browser and visit `http://<public-ip>:31111` to access the Nginx web server.
 
-## Method 2: Deploy via AWS CLI (PowerShell)
+## Method 2: Deploy via PowerShell
 
 This method allows for automation using the AWS CLI, making it ideal for scripting and continuous deployment.
 
