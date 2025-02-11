@@ -139,6 +139,39 @@ aws cloudformation delete-stack --stack-name nginx
 ```
 This command will automatically delete all resources created by the stack, ensuring a clean removal.
 
+# Screenshorts
+---------------
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/20.png)
+
+Creating Stack using PowerShell commands
+
+---
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/21.png)
+
+Stack details
+
+---
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/22.png)
+
+Accessing web page
+
+---
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/23.png)
+
+Verifying Pods details
+
+---
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/24.png)
+
+Deleting the stack
+
+---
+
 ## Conclusion
 
 This guide provides two methods for deploying an Nginx web server on k3s using AWS CloudFormation. The manual AWS Console method is user-friendly and ideal for beginners, while the AWS CLI method enables automation and efficient resource management. Depending on your workflow and preference, you can choose the most suitable deployment method.
