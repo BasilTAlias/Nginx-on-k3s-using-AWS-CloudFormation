@@ -29,6 +29,81 @@ This method provides a user-friendly interface to deploy the CloudFormation stac
 12. Locate the **InstancePublicIp** output, which provides the public IP address of the EC2 instance running Nginx.
 13. Open a browser and visit `http://<public-ip>:31111` to access the Nginx web server.
 
+# Screenshorts
+---------------
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/1.png)
+
+Create Stack
+
+---
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/2.png)
+
+Uploading template file
+
+---
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/3.png)
+
+Providing stack name
+
+---
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/4.png)
+
+Stack creation in progress 
+
+---
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/5.png)
+
+Stack creation completed successfully
+
+---
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/6.png)
+
+Output details
+
+---
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/7.png)
+
+Instance details
+
+---
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/8.png)
+
+Security group details
+
+---
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/9.png)
+
+Accessing web page
+
+---
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/10.png)
+
+Checking Pods details
+
+---
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/11.png)
+
+Deleting stack
+
+---
+
+![Alt text of the image](https://github.com/BasilTAlias/Nginx-on-k3s-using-AWS-CloudFormation/blob/main/Images/12.png)
+
+Successfully Deleted Stack
+
+---
+
 ## Method 2: Deploy via PowerShell
 
 This method allows for automation using the AWS CLI, making it ideal for scripting and continuous deployment.
